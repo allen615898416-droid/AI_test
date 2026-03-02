@@ -162,6 +162,28 @@
             color: #854d0e;
             font-weight: 600;
         }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body { padding: 16px 10px; }
+            .header { margin-bottom: 30px; }
+            .header h1 { font-size: 1.6rem; }
+            .header p { font-size: 0.95rem; }
+            .section-box { padding: 20px 16px; margin-bottom: 24px; }
+            .section-title { font-size: 1.25rem; margin-bottom: 18px; padding-bottom: 10px; }
+            .intro-text { font-size: 0.95rem; margin-bottom: 18px; }
+            .layer-card { padding: 16px; margin-bottom: 14px; }
+            .layer-header h3 { font-size: 1.05rem; }
+            .badge { font-size: 0.75rem; padding: 3px 8px; margin-left: 8px; }
+            .ps-note { font-size: 0.8rem; padding: 10px; }
+            .demo-btn { display: flex; width: 100%; justify-content: center; margin-right: 0; font-size: 0.85rem; padding: 10px 14px; }
+            .step-container { padding-left: 18px; margin-left: 8px; margin-top: 20px; }
+            .step-item { margin-bottom: 28px; }
+            .step-item::before { left: -26px; width: 12px; height: 12px; }
+            .step-title { font-size: 1.05rem; }
+            ul { padding-left: 16px; }
+            li { font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body>
@@ -174,7 +196,7 @@
     <div class="section-box">
         <h2 class="section-title">【信息类】聚焦业务价值：建立"时-日-周-月"的业务流程及标准</h2>
         <p class="intro-text">
-            <strong>1，现状与机制：</strong>目前，预研团队已初步搭建底层的自动化信息收集体系。为了解决过去"只有信息获取储备，缺乏业务内参"的问题，过滤掉全网 90% 与外发业务无关的 AI 噪音，我们建立了一套以时间为轴的四级价值过滤漏斗：
+            <strong>现状与机制：</strong>目前，预研团队已初步搭建底层的自动化信息收集体系。为了解决过去"只有信息获取储备，缺乏业务内参"的问题，过滤掉全网 90% 与外发业务无关的 AI 噪音，我们建立了一套以时间为轴的四级价值过滤漏斗：
         </p>
 
         <div class="layer-card">
@@ -227,8 +249,8 @@
                 </li>
                 <li><strong>产出形式：</strong> 高价值热点不晚于 T+1 输出，每周附带业务洞察的专题文章</li>
             </ul>
+            <a href="https://alexisyang718-beep.github.io/ai-weekly-report/" target="_blank" class="demo-btn">周复盘示意：2月4周（内容还需优化）</a>
             <a href="https://mp.weixin.qq.com/s/2yXfB_Eog_7r28v3jxzWEQ?clicktime=1772438065&enterid=1772438065&scene=126&sessionid=1772437913&subscene=undefined" target="_blank" class="demo-btn">热点示意：春节档大爆发：国产模型崛起、字节全面进攻、产品形态探索人机边界</a>
-            <a href="https://doc.weixin.qq.com/doc/w3_AEwAigb_ACkCNCdvnvJjVQAmizPHf?scode=AJEAIQdfAAobBMqqfeAEwAigb_ACk&isEnterEdit=1" target="_blank" class="demo-btn" style="background:#fff; color:var(--text-muted); border-color:var(--border-color);">周复盘示意：重点AI事件观察</a>
         </div>
 
         <div class="layer-card" style="border-left: 4px solid #cbd5e1; margin-bottom: 0;">
@@ -237,17 +259,17 @@
                 <span class="badge" style="background: #f1f5f9; color: var(--text-muted);">Layer 4</span>
             </div>
             <ul>
-                <li><strong>核心动作：</strong> 回顾整月的大事件、洞察与研判，结合发行业务大盘，输出战略视野的月度内参。</li>
+                <li><strong>核心动作：</strong> 回顾整月的大事件、洞察与研判，结合发行业务大盘，输出洞察分析。</li>
             </ul>
             <span style="display:inline-block; margin-top:5px; padding: 4px 12px; background:#e2e8f0; border-radius:4px; font-size:0.85rem; color:#475569; font-weight:600;">本周输出</span>
         </div>
     </div>
 
     <div class="section-box">
-        <h2 class="section-title">【工具类】建立可复用的 AI 生产力核心逻辑</h2>
+        <h2 class="section-title">【工具类】沉淀可复用的 AI 生产力</h2>
         
         <p class="intro-text">
-            <strong>1，现状与机制：</strong>结束散点试用，通过标准化的工业流程（工具验证 ➡️ 效果评估 ➡️ 输出 Demo ➡️ 沉淀工作流 SOP），将前沿 AI 能力转化为业务可用的生产力工具。
+            <strong>现状与机制：</strong>结束散点试用，通过标准化的工业流程（工具验证 ➡️ 效果评估 ➡️ 输出 Demo ➡️ 沉淀工作流 SOP），将前沿 AI 能力转化为业务可用的生产力工具。
         </p>
 
         <div class="step-container">
@@ -255,9 +277,9 @@
             <div class="step-item">
                 <div class="step-title">工具验证</div>
                 <ul>
-                    <li><strong>验证对象：</strong> 新大模型 （多模态） / 自动化工作流（如：Claude code/OpenClaw等）。</li>
+                    <li><strong>验证对象：</strong> 新大模型 （多模态） / Agent工作流（类OpenClaw）</li>
                     <li><strong>验证内容：</strong> 
-                        <br>○ <strong>模型侧：</strong> 以游戏（春节）营销节点为例（如推广文案、主KV、活动pv等）
+                        <br>○ <strong>模型侧：</strong> 以游戏营销节点为例（如推广文案、主KV、活动pv等）
                         <br>○ <strong>工具侧：</strong> 解决现行业务问题（如日常渠道监控、海外情报搜集、竞品资讯获取等）
                     </li>
                 </ul>
@@ -266,11 +288,11 @@
             <div class="step-item">
                 <div class="step-title">效果评估</div>
                 <ul>
-                    <li><strong>评估纬度：</strong>
-                        <br>○ <strong>可用率：</strong> 相比现有工具，可用率是否显著提升（如：更懂游戏黑话，出图不再崩手，视频不用抽卡）是否有行业性突破
-                        <br>○ <strong>速度：</strong> 生产速度是否有提升，提效50%以上
-                        <br>○ <strong>价格：</strong> 成本是否下降 30% 以上
-                        <br>○ <strong>深度：</strong> 了解全网对工具应用方式，复现其高阶使用方式，提升熟练度
+                    <li><strong>评估维度：</strong>
+                        <br>○ <strong>稳定：</strong> 可用率是否显著提升，是否有行业性突破（如：更懂游戏黑话，出图不再崩手，视频不用抽卡）
+                        <br>○ <strong>速度：</strong> 生产速度是否有提升（50%以上）
+                        <br>○ <strong>价格：</strong> 成本是否下降（30% 以上） 
+                        <br>○ <strong>潜力：</strong> 可能与业务结合的方向
                     </li>
                 </ul>
             </div>
@@ -281,7 +303,7 @@
                     <li><strong>形式：</strong> 专题文章（沉淀在公众号或 iwiki）/ 录屏</li>
                     <li><strong>周期：</strong> 不晚于 T+3 输出</li>
                 </ul>
-                <a href="https://mp.weixin.qq.com/s/xaMAtoU1R1ej_peTXodN5w?clicktime=1772438233&enterid=1772438233&scene=126&sessionid=1772438231&subscene=undefined" target="_blank" class="demo-btn">示意：即梦Seedance 2.0一手测评 Genie3体验</a>
+                <a href="https://mp.weixin.qq.com/s/xaMAtoU1R1ej_peTXodN5w?clicktime=1772438233&enterid=1772438233&scene=126&sessionid=1772438231&subscene=undefined" target="_blank" class="demo-btn">示意：即梦Seedance 2.0一手测评（deepseek出了替换掉）</a>
             </div>
 
             <div class="step-item" style="margin-bottom: 0;">
@@ -306,7 +328,7 @@
                 <li>通过工具应用，解决业务问题</li>
             </ul>
             
-            <h3 style="margin-top: 25px;">后续重点：</h3>
+            <h3 style="margin-top: 25px;">后续重点（这里需补3月计划）：</h3>
             <p style="margin-top: 10px; color: var(--text-muted);">
                 命中价值预判的内容时，进行深度解析与测算。针对目前的重点业务（如：<strong>外发获客、海外业务基建</strong>），及时拉齐策略/商务/运营同学。制定具有实操性的创新业务方案，预期 T+14 内形成专题汇报并推动落地。
             </p>

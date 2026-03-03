@@ -38,12 +38,64 @@ export async function saveConversation(conversationData) {
     }
 
     const data = await response.json();
-    console.log('✅ 对话已保存:', data.conversationId);
+    
+    // 如果返回了本地存储标记，保存到 localStorage
+    if (data.storage === 'local' && data.data) {
+      console.log('📱 保存到本地存储');
+      saveToLocalStorage(data.data);
+    }
+    
+    console.log('✅ 对话已保存:', data.conversationId, `(${data.storage})`);
     
     return data;
   } catch (error) {
-    console.error('❌ 保存对话失败:', error);
-    throw error;
+    console.error('❌ 保存对话失败，使用本地存储:', error);
+    
+    // 完全降级到本地存储
+    const conversationId = `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const localData = {
+      id: conversationId,
+      characterName,
+      gameName,
+      title: title || `与${characterName}的对话`,
+      chatHistory,
+      userId: getUserId(),
+      isPublic,
+      createdAt: Date.now(),
+      messageCount: chatHistory.length
+    };
+    
+    saveToLocalStorage(localData);
+    
+    return {
+      success: true,
+      conversationId,
+      shareUrl: `/share/${conversationId}`,
+      storage: 'local'
+    };
+  }
+}
+
+/**
+ * 保存到本地存储
+ */
+function saveToLocalStorage(conversationData) {
+  try {
+    // 获取现有的本地对话列表
+    const localConversations = JSON.parse(localStorage.getItem('localConversations') || '[]');
+    
+    // 添加新对话（保持最多20条）
+    localConversations.unshift(conversationData);
+    if (localConversations.length > 20) {
+      localConversations.pop();
+    }
+    
+    // 保存回 localStorage
+    localStorage.setItem('localConversations', JSON.stringify(localConversations));
+    
+    console.log('✅ 已保存到本地存储');
+  } catch (error) {
+    console.error('❌ 本地存储失败:', error);
   }
 }
 

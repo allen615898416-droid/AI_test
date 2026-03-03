@@ -30,7 +30,7 @@ export default function SaveDialog({ isOpen, onClose, onSave, isSaving }) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-[90%] max-w-md"
+            className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50 mx-auto max-w-md"
           >
             <div className="bg-slate-800 rounded-2xl p-6 shadow-2xl border border-slate-700">
               {/* 头部 */}

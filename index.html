@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 预研汇报：流程、标准、验证</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #1e293b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: #e2e8f0;
+            --accent-green: #10b981;
+            --accent-green-bg: #ecfdf5;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* 顶部标题栏 */
+        .header { text-align: center; margin-bottom: 50px; }
+        .header h1 { font-size: 2.4rem; color: var(--text-main); margin-bottom: 8px; }
+        .header p { font-size: 1.1rem; color: var(--text-muted); }
+
+        /* 大模块切分 */
+        .section-box {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eff6ff;
+            display: flex;
+            align-items: center;
+        }
+
+        .intro-text { margin-bottom: 25px; color: var(--secondary-color); font-size: 1.05rem; }
+
+        /* 层级卡片设计 (Layer) */
+        .layer-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .layer-header { display: flex; align-items: center; margin-bottom: 15px; }
+        .layer-header h3 { font-size: 1.25rem; color: var(--text-main); }
+        .badge {
+            background: #dbeafe;
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        ul { padding-left: 20px; margin-bottom: 15px; color: var(--text-muted); }
+        li { margin-bottom: 8px; }
+        strong { color: var(--text-main); }
+        
+        .ps-note {
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            color: #64748b;
+            margin-bottom: 15px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        /* 核心演示按钮 */
+        .demo-btn {
+            display: inline-flex;
+            align-items: center;
+            background: #eff6ff;
+            color: var(--primary-color);
+            border: 1px solid #bfdbfe;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        .demo-btn:hover { background: var(--primary-color); color: #ffffff; border-color: var(--primary-color); }
+        .demo-btn::before { content: "▶"; margin-right: 8px; font-size: 0.8rem; }
+        
+        /* 绿色的特定按钮，用于开源展示 */
+        .demo-btn.success { background: var(--accent-green-bg); color: #047857; border-color: #a7f3d0; }
+        .demo-btn.success:hover { background: var(--accent-green); color: #ffffff; border-color: var(--accent-green); }
+
+        /* 流程高亮条 */
+        .process-banner {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin: 25px 0;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 步骤流水线样式 (Section 2) */
+        .step-container {
+            border-left: 3px solid #e2e8f0;
+            padding-left: 25px;
+            margin-left: 15px;
+            margin-top: 30px;
+        }
+        .step-item { position: relative; margin-bottom: 40px; }
+        .step-item::before {
+            content: "";
+            position: absolute;
+            left: -33px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid white;
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+        .step-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; }
+
+        .highlight {
+            background: #fef08a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #854d0e;
+            font-weight: 600;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            body { padding: 16px 10px; }
+            .header { margin-bottom: 30px; }
+            .header h1 { font-size: 1.6rem; }
+            .header p { font-size: 0.95rem; }
+            .section-box { padding: 20px 16px; margin-bottom: 24px; }
+            .section-title { font-size: 1.25rem; margin-bottom: 18px; padding-bottom: 10px; }
+            .intro-text { font-size: 0.95rem; margin-bottom: 18px; }
+            .layer-card { padding: 16px; margin-bottom: 14px; }
+            .layer-header h3 { font-size: 1.05rem; }
+            .badge { font-size: 0.75rem; padding: 3px 8px; margin-left: 8px; }
+            .ps-note { font-size: 0.8rem; padding: 10px; }
+            .demo-btn { display: flex; width: 100%; justify-content: center; margin-right: 0; font-size: 0.85rem; padding: 10px 14px; }
+            .step-container { padding-left: 18px; margin-left: 8px; margin-top: 20px; }
+            .step-item { margin-bottom: 28px; }
+            .step-item::before { left: -26px; width: 12px; height: 12px; }
+            .step-title { font-size: 1.05rem; }
+            ul { padding-left: 16px; }
+            li { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>AI 预研汇报：流程、标准、验证</h1>
+    </div>
+
+    <div class="section-box">
+        <h2 class="section-title">【信息类】聚焦业务价值：建立"时-日-周-月"的业务流程及标准</h2>
+        <p class="intro-text">
+            <strong>现状与机制：</strong>目前，AI团队已初步搭建自动化信息收集体系，建设四级价值过滤漏斗：
+        </p>
+
+        <div class="layer-card">
+            <div class="layer-header">
+                <h3>● 小时级监控：异动捕捉</h3>
+                <span class="badge">Layer 1</span>
+            </div>
+            <ul>
+                <li><strong>核心动作：</strong> AI每小时巡查，看信息变化。</li>
+                <li><strong>异动提醒：</strong> 模型/工具重大更新。</li>
+                <li><strong>技术与信源：</strong> 底层采用多线程聚合爬虫，现已全自动化覆盖 10 大国内外硬核信源。</li>
+                <li><strong>产出形式：</strong> 监控机器人</li>
+            </ul>
+            <div class="ps-note">
+                <strong>PS：信源涵盖</strong> TechURLs、Buzzing、Info Flow (Iris)、BestBlogs、TopHub (今日热榜)、Zeli (HN 24小时热榜)、AI HubToday、AIbase、AI今日热榜、NewsNow (逆向 API 抓取 Github/少数派/36氪等开发者社区)。
+            </div>
+            <a href="https://i.ibb.co/hJGNX9tB/cb3dfb8e-3a54-4d66-8839-4fc159e876f5.png" target="_blank" class="demo-btn">监控示意：监控任务</a>
+        </div>
+
+        <div class="layer-card">
+            <div class="layer-header">
+                <h3>● 日级别总结：去重粗筛</h3>
+                <span class="badge">Layer 2</span>
+            </div>
+            <ul>
+                <li><strong>核心动作：</strong> 每日结合大模型 API 自动清洗、去重与摘要。</li>
+                <li><strong>异动提醒：</strong> 同一天不同信源（如科技媒体+社交平台）提及度 >30%；或开源影响力爆发（如单日新增 Star 数 > 100-200，单月内总 Github 星数 >1000+）。</li>
+                <li><strong>产出形式：</strong> 公众号日报，实现每日资讯聚合与排版推送。</li>
+            </ul>
+            <a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzY0MDY0NDE5Nw==&scene=124#wechat_redirect" target="_blank" class="demo-btn">日报示意：AI资讯日报 2026年3月2日</a>
+        </div>
+
+        <div class="layer-card">
+            <div class="layer-header">
+                <h3>● 周级别洞察：二次加工与业务预判</h3>
+                <span class="badge">Layer 3</span>
+            </div>
+            <ul>
+                <li><strong>核心动作：</strong> 针对小时/日级别命中的高热度信息，人工+AI并行研判，锚定四大方向，用"三原则"做价值推演。</li>
+                <li><strong>过滤锚点（四大核心方向）：</strong>
+                    <br>1. AI行业底层基建（国内外大模型top10、多模态、世界模型、端侧AI动向）
+                    <br>2. 游戏行业AI应用（特别是发行环节的AI应用案例）
+                    <br>3. 外发核心阵地（硬核厂商如华米OV、内容平台如抖快B站的AI动作）
+                    <br>4. C端AI应用（元宝竞品及各类AI原生App的增长裂变玩法）
+                </li>
+                <li><strong>价值预判（人工研判三原则）：</strong>
+                    <br>1. <strong>流量结构：</strong> 评估该信息是否会冲击现有的分发逻辑（如系统级AI拦截了传统商店流量），推演渠道应对策略。
+                    <br>2. <strong>降本增效：</strong> 评估模型能力突破/降价能否大幅降低现有工作（如买量）的成本，测算 ROI 并提报测试预算。
+                    <br>3. <strong>业务增长：</strong> 评估新技术能否为当前重点项目（如元宝高质量用户增长、腾讯游戏资源创新分发）带来新抓手。
+                </li>
+                <li><strong>产出形式：</strong> 高价值热点不晚于 T+1 输出，每周附带业务洞察的专题文章</li>
+            </ul>
+            <a href="https://alexisyang718-beep.github.io/ai-weekly-report/" target="_blank" class="demo-btn">周复盘示意：2月4周（内容还需优化）</a>
+            <a href="https://mp.weixin.qq.com/s/2yXfB_Eog_7r28v3jxzWEQ?clicktime=1772438065&enterid=1772438065&scene=126&sessionid=1772437913&subscene=undefined" target="_blank" class="demo-btn">热点示意：春节档大爆发：国产模型崛起、字节全面进攻、产品形态探索人机边界</a>
+        </div>
+
+        <div class="layer-card" style="border-left: 4px solid #cbd5e1; margin-bottom: 0;">
+            <div class="layer-header">
+                <h3>● 月级别复盘：全局研判</h3>
+                <span class="badge" style="background: #f1f5f9; color: var(--text-muted);">Layer 4</span>
+            </div>
+            <ul>
+                <li><strong>核心动作：</strong> 回顾整月的大事件、洞察与研判，结合发行业务大盘，输出洞察分析。</li>
+            </ul>
+            <span style="display:inline-block; margin-top:5px; padding: 4px 12px; background:#e2e8f0; border-radius:4px; font-size:0.85rem; color:#475569; font-weight:600;">本周输出</span>
+        </div>
+    </div>
+
+    <div class="section-box">
+        <h2 class="section-title">【工具类】沉淀可复用的 AI 生产力</h2>
+        
+        <p class="intro-text">
+            <strong>现状与机制：</strong>结束散点试用，通过标准化的工业流程（工具验证 ➡️ 效果评估 ➡️ 输出 Demo ➡️ 沉淀工作流 SOP），将前沿 AI 能力转化为业务可用的生产力工具。
+        </p>
+
+        <div class="step-container">
+            
+            <div class="step-item">
+                <div class="step-title">工具验证</div>
+                <ul>
+                    <li><strong>验证对象：</strong> 新大模型 （多模态） / Agent工作流（类OpenClaw）</li>
+                    <li><strong>验证内容：</strong> 
+                        <br>○ <strong>模型侧：</strong> 以游戏营销节点为例（如推广文案、主KV、活动pv等）
+                        <br>○ <strong>工具侧：</strong> 解决现行业务问题（如日常渠道监控、海外情报搜集、竞品资讯获取等）
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step-item">
+                <div class="step-title">效果评估</div>
+                <ul>
+                    <li><strong>评估维度：</strong>
+                        <br>○ <strong>稳定：</strong> 可用率是否显著提升，是否有行业性突破（如：更懂游戏黑话，出图不再崩手，视频不用抽卡）
+                        <br>○ <strong>速度：</strong> 生产速度是否有提升（50%以上）
+                        <br>○ <strong>价格：</strong> 成本是否下降（30% 以上） 
+                        <br>○ <strong>潜力：</strong> 可能与业务结合的方向
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step-item">
+                <div class="step-title">输出 Demo</div>
+                <ul>
+                    <li><strong>形式：</strong> 专题文章（沉淀在公众号或 iwiki）/ 录屏</li>
+                    <li><strong>周期：</strong> 不晚于 T+3 输出</li>
+                </ul>
+                <a href="https://mp.weixin.qq.com/s/xaMAtoU1R1ej_peTXodN5w?clicktime=1772438233&enterid=1772438233&scene=126&sessionid=1772438231&subscene=undefined" target="_blank" class="demo-btn">示意：即梦Seedance 2.0一手测评（deepseek出了替换掉）</a>
+            </div>
+
+            <div class="step-item" style="margin-bottom: 0;">
+                <div class="step-title">沉淀工作流 SOP</div>
+                <ul>
+                    <li><strong>形式：</strong> 开源分享（沉淀在Github或iwiki）确保后续业务成员可直接复刻应用</li>
+                    <li><strong>周期：</strong> 根据复杂程度评估，预期 T+7</li>
+                </ul>
+                <a href="https://github.com/alexisyang718-beep" target="_blank" class="demo-btn success">示意：alexisyang718-beep · GitHub</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="section-box">
+        <h2 class="section-title">【价值创造】将预研成果转化为真实的业务收益</h2>
+        
+        <p class="intro-text">
+            通过信息漏斗挖掘高价值业务线索，结合工具管线沉淀的标准化 SOP，从业务痛点切入，完成价值转化。
+        </p>
+
+        <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 5px;">3月重点计划：</h3>
+
+        <div class="step-container">
+            <div class="step-item">
+                <div class="step-title">落地信息类业务流程及标准</div>
+                <ul>
+                    <li><strong>截止时间：</strong> 3月6日前</li>
+                </ul>
+            </div>
+
+            <div class="step-item">
+                <div class="step-title">搭建 AI 核心数据监控看板</div>
+                <ul>
+                    <li><strong>截止时间：</strong> 3月13日前</li>
+                </ul>
+            </div>
+
+            <div class="step-item" style="margin-bottom: 0;">
+                <div class="step-title">根据周报/月报内容，补充后续计划</div>
+                <ul>
+                    <li><strong>截止时间：</strong> 待定</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

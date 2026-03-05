@@ -16,6 +16,14 @@
     .modal-content { animation: scaleIn 0.25s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .video-modal-bg { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); animation: fadeIn 0.2s ease; }
+    .video-modal-bg.active { display: flex; }
+    .video-modal-box { position: relative; background: #000; border-radius: 1rem; overflow: hidden; width: 90vw; max-width: 800px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); animation: scaleIn 0.25s ease; }
+    .video-modal-box video { display: block; width: 100%; max-height: 80vh; }
+    .video-close-btn { position: absolute; top: 12px; right: 12px; z-index: 10; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.6); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .video-close-btn:hover { background: rgba(0,0,0,0.85); }
+    .video-title-bar { position: absolute; top: 0; left: 0; right: 50px; padding: 12px 16px; background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent); z-index: 5; }
+    .video-title-bar span { color: white; font-size: 14px; font-weight: 600; }
     /* lucide icon inline */
     .icon { display: inline-flex; align-items: center; justify-content: center; }
     .icon svg { width: 1em; height: 1em; }
@@ -306,7 +314,7 @@
                 <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full">深度检索</span>
               </div>
               <p class="text-gray-600 text-sm leading-relaxed mb-4">集成 Perplexity 引擎，将手机变成主动信息处理终端，解决多线信息整理痛点。原生浏览器中，调用 Ask AI（Hey Plex），可直接对并行打开的多个研报/长文网页进行交叉比对，输出结构化摘要。</p>
-              <button onclick="openVideo('https://drive.weixin.qq.com/s?k=AJEAIQdfAAoTQWRJBY', 'Ask AI 深度检索')" class="group inline-flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 hover:border-indigo-200 rounded-xl px-4 py-2.5 text-sm text-indigo-700 hover:text-indigo-800 transition-all cursor-pointer">
+              <button onclick="openVideo('perplexity.mp4', 'Ask AI 深度检索')" class="group inline-flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 hover:border-indigo-200 rounded-xl px-4 py-2.5 text-sm text-indigo-700 hover:text-indigo-800 transition-all cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
                 <span class="font-medium">实机演示：Ask AI 深度检索</span>
               </button>
@@ -347,7 +355,7 @@
               </div>
               <p class="text-gray-600 text-sm leading-relaxed mb-4">端侧不联网的本地微模型可自动代接未知来电，实时转录文字摘要并进行反诈拦截；同时 S26 采用了双像素架构实现硬件级的物理防窥屏。</p>
               <div class="flex flex-wrap gap-2">
-                <button onclick="openVideo('https://drive.weixin.qq.com/s?k=AJEAIQdfAAo6ql2Ke1', '端侧通话过滤')" class="group inline-flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 hover:border-indigo-200 rounded-xl px-4 py-2.5 text-sm text-indigo-700 hover:text-indigo-800 transition-all cursor-pointer">
+                <button onclick="openVideo('通话过滤.mp4', '端侧通话过滤')" class="group inline-flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 hover:border-indigo-200 rounded-xl px-4 py-2.5 text-sm text-indigo-700 hover:text-indigo-800 transition-all cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
                   <span class="font-medium">实机演示：端侧通话过滤</span>
                 </button>
@@ -424,7 +432,16 @@
 
   </main>
 
-
+  <!-- 视频弹窗 -->
+  <div id="video-modal" class="video-modal-bg" onclick="closeVideo(event)">
+    <div class="video-modal-box" onclick="event.stopPropagation()">
+      <div class="video-title-bar"><span id="video-title"></span></div>
+      <button class="video-close-btn" onclick="closeVideo()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <video id="video-player" controls playsinline></video>
+    </div>
+  </div>
 
   <script>
     // 导航高亮
@@ -487,10 +504,29 @@
       document.getElementById('close-icon').classList.add('hidden');
     }
 
-    // Video - 直接新标签页打开（企微网盘不允许 iframe 嵌入）
+    // Video - 页内弹窗播放
     function openVideo(url, label) {
-      window.open(url, '_blank');
+      const modal = document.getElementById('video-modal');
+      const player = document.getElementById('video-player');
+      document.getElementById('video-title').textContent = label;
+      player.src = url;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      player.play().catch(() => {});
     }
+    function closeVideo(e) {
+      if (e && e.target !== document.getElementById('video-modal')) return;
+      const modal = document.getElementById('video-modal');
+      const player = document.getElementById('video-player');
+      player.pause();
+      player.src = '';
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    // ESC 关闭
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeVideo();
+    });
   </script>
 
 </body>
